@@ -10,7 +10,9 @@ function tweenColors( fromColor, toColor, steps = 1, inclusive ){
       rDiff, gDiff, bDiff, rBuffer, gBuffer, bBuffer,
       rInc, gInc, bInc;
 
-  //steps = ( typeof( steps ) === "number" && setpe ) || 1; //legacy versioin of defaulting steps
+  //TODO:// add support hsl, hsla, rgb, rgba, color names (w/o lookup table if possible...)
+  // also, support 3,6 and 8 char hex colors... probably just in a separate all-color to 8-hex color function.
+  //steps = ( typeof( steps ) === "number" && setpe ) || 1; //legacy version of defaulting steps
 
   r1 = parseInt( fromColor.slice( 1,3 ), 16 );
   g1 = parseInt( fromColor.slice( 3,5 ), 16 );
@@ -28,19 +30,16 @@ function tweenColors( fromColor, toColor, steps = 1, inclusive ){
   gInc = gDiff / ( steps + 1 );
   bInc = bDiff / ( steps + 1 );
   
-  if( inclusive ){
-    output.push( toColor );
-  }
-  
   for( i = 0; i < steps; i++){
       rBuffer = leftPad( Math.round( r2 + ( rInc * ( i + 1 ) ) ).toString( 16 ), 2, "0" );
       gBuffer = leftPad( Math.round( g2 + ( gInc * ( i + 1 ) ) ).toString( 16 ), 2, "0" );
       bBuffer = leftPad( Math.round( b2 + ( bInc * ( i + 1 ) ) ).toString( 16 ), 2, "0");
-      output.push( "#" + rBuffer + gBuffer + bBuffer ); 
+      output.unshift( "#" + rBuffer + gBuffer + bBuffer ); 
   }
   
   if( inclusive ){
-    output.push( fromColor );
+    output.push( toColor );
+    output.unshift( fromColor );
   }
   
   return output;
